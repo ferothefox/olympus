@@ -1272,13 +1272,13 @@ const [
   }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 768px) {
   .landing-hero {
     h2 {
       font-size: 1.625rem;
     }
 
-    margin-top: -4rem;
+    margin-top: -6rem;
     padding: 11.25rem 1rem 12rem;
   }
 

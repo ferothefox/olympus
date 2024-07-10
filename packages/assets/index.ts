@@ -34,6 +34,7 @@ import _BellRingIcon from './icons/bell-ring.svg?component'
 import _BookIcon from './icons/book.svg?component'
 import _BookmarkIcon from './icons/bookmark.svg?component'
 import _BoxIcon from './icons/box.svg?component'
+import _BracesIcon from './icons/braces.svg?component'
 import _CalendarIcon from './icons/calendar.svg?component'
 import _ChartIcon from './icons/chart.svg?component'
 import _CheckIcon from './icons/check.svg?component'
@@ -65,6 +66,7 @@ import _FolderOpenIcon from './icons/folder-open.svg?component'
 import _FolderSearchIcon from './icons/folder-search.svg?component'
 import _GapIcon from './icons/gap.svg?component'
 import _GitHubIcon from './icons/github.svg?component'
+import _GlassesIcon from './icons/glasses.svg?component'
 import _GlobeIcon from './icons/globe.svg?component'
 import _GridIcon from './icons/grid.svg?component'
 import _HamburgerIcon from './icons/hamburger.svg?component'
@@ -184,6 +186,7 @@ export const BellRingIcon = _BellRingIcon
 export const BookIcon = _BookIcon
 export const BookmarkIcon = _BookmarkIcon
 export const BoxIcon = _BoxIcon
+export const BracesIcon = _BracesIcon
 export const CalendarIcon = _CalendarIcon
 export const ChartIcon = _ChartIcon
 export const CheckIcon = _CheckIcon
@@ -216,6 +219,7 @@ export const FolderOpenIcon = _FolderOpenIcon
 export const FolderSearchIcon = _FolderSearchIcon
 export const GapIcon = _GapIcon
 export const GitHubIcon = _GitHubIcon
+export const GlassesIcon = _GlassesIcon
 export const GlobeIcon = _GlobeIcon
 export const GridIcon = _GridIcon
 export const HamburgerIcon = _HamburgerIcon

@@ -310,11 +310,11 @@ function getItemLabel(locale: Locale) {
           @keydown="onSearchKeydown"
         />
 
-        <div id="language-search-description" class="visually-hidden">
+        <div id="language-search-description" class="sr-only">
           {{ formatMessage(messages.searchFieldDescription) }}
         </div>
 
-        <div id="language-search-results-announcements" class="visually-hidden" aria-live="polite">
+        <div id="language-search-results-announcements" class="sr-only" aria-live="polite">
           {{
             isQueryEmpty()
               ? ""

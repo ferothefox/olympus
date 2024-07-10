@@ -54,3 +54,4 @@ apps/frontend/src/generated
 .turbo
 target
 generated
+.env

@@ -38,8 +38,8 @@
 }
 
 .normal-page {
+  padding: 0 1rem;
   display: grid;
-  padding: 0 0.75rem;
 
   grid-template:
     "sidebar"
@@ -62,10 +62,6 @@
   .normal-page__content {
     grid-area: content;
   }
-}
-
-.site-header {
-  margin: 0 0.75rem;
 }
 
 @media (min-width: 1024px) {

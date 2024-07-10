@@ -36,135 +36,217 @@
         <Button transparent icon-only :action="hideStagingBanner"><XIcon /></Button>
       </div>
     </div>
-    <header class="site-header" role="presentation">
-      <section class="navbar columns" role="navigation">
-        <section class="logo column" role="presentation">
-          <NuxtLink class="button-base" to="/" aria-label="Modrinth home page">
-            <BrandTextLogo aria-hidden="true" class="text-logo" />
+    <header
+      class="site-header relative isolate z-[5] mx-auto w-full max-w-7xl px-0 py-0 md:px-4 md:py-4"
+      role="presentation"
+    >
+      <section class="navbar hidden w-full lg:flex" role="navigation">
+        <section class="flex items-center gap-6 text-dark" role="presentation">
+          <NuxtLink class="flex items-center" to="/" aria-label="Modrinth home page">
+            <BrandTextLogo aria-hidden="true" class="h-7 w-auto" />
           </NuxtLink>
-        </section>
-        <section class="nav-group columns" role="presentation">
-          <section class="nav" aria-label="Page links">
+          <div class="flex flex-row gap-6">
             <NavRow class="navigation" :links="navRoutes" />
-          </section>
-          <section class="column-grow user-outer" aria-label="Account links">
-            <section class="user-controls">
-              <nuxt-link
-                v-if="auth.user"
-                to="/dashboard/notifications"
-                class="control-button button-transparent"
-                :title="formatMessage(commonMessages.notificationsLabel)"
-              >
-                <NotificationIcon aria-hidden="true" />
-              </nuxt-link>
-              <button
-                class="control-button button-transparent"
-                :title="formatMessage(messages.changeTheme)"
-                @click="changeTheme"
-              >
-                <MoonIcon v-if="$colorMode.value === 'light'" aria-hidden="true" />
-                <SunIcon v-else aria-hidden="true" />
-              </button>
-              <div
-                v-if="auth.user"
-                class="dropdown"
-                :class="{ closed: !isDropdownOpen }"
-                tabindex="0"
-                @mouseover="isDropdownOpen = true"
-                @focus="isDropdownOpen = true"
-                @mouseleave="isDropdownOpen = false"
-              >
-                <button class="control" value="Profile Dropdown">
-                  <Avatar
-                    :src="auth.user.avatar_url"
-                    class="user-icon"
-                    :alt="formatMessage(messages.yourAvatarAlt)"
-                    aria-hidden="true"
-                    circle
+          </div>
+          <!-- <div
+            class="global-navigation-dropdown relative isolate z-[9999]"
+            :class="{ closed: !isNavDropdownOpen }"
+            tabindex="0"
+            :aria-expanded="isNavDropdownOpen"
+            @mouseover="isNavDropdownOpen = true"
+            @focus="isNavDropdownOpen = true"
+            @mouseleave="isNavDropdownOpen = false"
+          >
+            <div class="flex flex-row items-center gap-0.5">
+              <div class="overflow-hidden rounded-r-none">
+                <div
+                  class="flex select-none items-center gap-1 rounded-l-full border-2 border-solid border-button-bgHover bg-button-bg py-1 pl-3 pr-2.5 text-sm font-bold"
+                >
+                  <BoxIcon v-if="route.path === '/mods' || route.path.includes('mod')" />
+                  <PaintBrushIcon
+                    v-else-if="
+                      route.path === '/resourcepacks' || route.path.includes('resourcepack')
+                    "
                   />
-                  <DropdownIcon class="caret" />
-                </button>
-                <div class="content card">
-                  <NuxtLink class="item button-transparent" :to="`/user/${auth.user.username}`">
-                    <div class="title profile-link">
-                      <div class="username">@{{ auth.user.username }}</div>
-                      <div class="prompt">{{ formatMessage(commonMessages.visitYourProfile) }}</div>
-                    </div>
-                  </NuxtLink>
-                  <hr class="divider" />
-                  <button class="item button-transparent" @click="$refs.modal_creation.show()">
-                    <PlusIcon class="icon" />
-                    <span class="title">
-                      {{ formatMessage(commonMessages.createAProjectButton) }}
-                    </span>
-                  </button>
-                  <hr class="divider" />
-                  <NuxtLink class="item button-transparent" to="/dashboard/collections">
-                    <LibraryIcon class="icon" />
-                    <span class="title">{{ formatMessage(commonMessages.collectionsLabel) }}</span>
-                  </NuxtLink>
-                  <NuxtLink class="item button-transparent" to="/dashboard/notifications">
-                    <NotificationIcon class="icon" />
-                    <span class="title">{{
-                      formatMessage(commonMessages.notificationsLabel)
-                    }}</span>
-                  </NuxtLink>
-                  <NuxtLink class="item button-transparent" to="/dashboard">
-                    <ChartIcon class="icon" />
-                    <span class="title">{{ formatMessage(commonMessages.dashboardLabel) }}</span>
-                  </NuxtLink>
-                  <NuxtLink class="item button-transparent" to="/settings">
-                    <SettingsIcon class="icon" />
-                    <span class="title">{{ formatMessage(commonMessages.settingsLabel) }}</span>
-                  </NuxtLink>
-                  <NuxtLink
-                    v-if="tags.staffRoles.includes(auth.user.role)"
-                    class="item button-transparent"
-                    to="/moderation"
-                  >
-                    <ModerationIcon class="icon" />
-                    <span class="title">{{ formatMessage(commonMessages.moderationLabel) }}</span>
-                  </NuxtLink>
-                  <NuxtLink v-if="flags.developerMode" class="item button-transparent" to="/flags">
-                    <ReportIcon class="icon" />
-                    <span class="title">Feature flags</span>
-                  </NuxtLink>
-                  <NuxtLink
-                    v-if="!cosmetics.hideModrinthAppPromos"
-                    class="item button-transparent primary-color"
-                    to="/app"
-                  >
-                    <DownloadIcon class="icon" />
-                    <span class="title">
-                      {{ formatMessage(messages.getModrinthApp) }}
-                    </span>
-                  </NuxtLink>
-                  <hr class="divider" />
-                  <button class="item button-transparent" @click="logoutUser()">
-                    <LogOutIcon class="icon" />
-                    <span class="dropdown-item__text">
-                      {{ formatMessage(commonMessages.signOutButton) }}
-                    </span>
-                  </button>
+                  <BracesIcon
+                    v-else-if="route.path === '/datapacks' || route.path.includes('datapack')"
+                  />
+                  <GlassesIcon
+                    v-else-if="route.path === '/shaders' || route.path.includes('shader')"
+                  />
+
+                  {{
+                    error
+                      ? `Error ${error.statusCode}`
+                      : navRoutes.find((navRoute) => navRoute.href === route.path)?.label ??
+                        (route.path === "/app"
+                          ? "App"
+                          : route.path === "/" || route.path === ""
+                            ? "Home"
+                            : route.path
+                                .split("/")[1]
+                                .replace(/\//g, " ")
+                                .replace(/\b\w/g, (l) => l.toUpperCase()))
+                  }}
                 </div>
               </div>
-              <section v-else class="auth-prompt">
-                <nuxt-link class="iconified-button raised-button" to="/auth/sign-in">
-                  <LogInIcon /> {{ formatMessage(commonMessages.signInButton) }}
-                </nuxt-link>
-                <nuxt-link
-                  v-if="$route.path !== '/app' && !cosmetics.hideModrinthAppPromos"
-                  class="btn btn-outline btn-primary app-btn"
+              <div class="overflow-hidden rounded-l-none">
+                <div
+                  class="flex select-none items-center gap-2 rounded-r-full border-2 border-solid border-button-bgHover bg-button-bg py-1 pl-0.5 pr-1 text-sm font-bold"
+                >
+                  <DropdownIcon
+                    class="my-0.5 h-4 w-4 transition-all"
+                    :class="{ 'rotate-180': isNavDropdownOpen }"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="content card !-left-0 right-[unset] flex select-none flex-col">
+              <NuxtLink
+                class="item button-transparent"
+                v-for="navRoute in navRoutes"
+                :key="navRoute.href"
+                :to="navRoute.href"
+              >
+                {{ navRoute.label }}
+              </NuxtLink>
+            </div>
+          </div> -->
+        </section>
+        <section
+          class="ml-auto flex items-center gap-4"
+          role="navigation"
+          aria-label="Account Links"
+        >
+          <!-- <button
+            v-if="auth.user"
+            class="flex items-center gap-2 rounded-xl border-2 border-solid border-button-bgHover bg-button-bg px-2.5 py-1.5 text-sm font-bold text-dark"
+            @click="$refs.modal_creation.show()"
+          >
+            <PlusIcon class="h-5 w-5" />
+            <span class="title"> New </span>
+          </button> -->
+          <section
+            class="user-controls relative isolate z-[5] flex items-center justify-between gap-3"
+          >
+            <nuxt-link
+              v-if="auth.user"
+              to="/dashboard/notifications"
+              class="button-transparent grid h-8 w-8 place-content-center !rounded-full"
+              :title="formatMessage(commonMessages.notificationsLabel)"
+            >
+              <NotificationIcon class="h-5 w-5" aria-hidden="true" />
+            </nuxt-link>
+            <button
+              class="button-transparent grid h-8 w-8 place-content-center !rounded-full"
+              :title="formatMessage(messages.changeTheme)"
+              @click="changeTheme"
+            >
+              <MoonIcon class="h-5 w-5" v-if="$colorMode.value === 'light'" aria-hidden="true" />
+              <SunIcon class="h-5 w-5" v-else aria-hidden="true" />
+            </button>
+            <div
+              v-if="auth.user"
+              class="global-navigation-dropdown relative"
+              :class="{ closed: !isDropdownOpen }"
+              tabindex="0"
+              :aria-expanded="isDropdownOpen"
+              @mouseover="isDropdownOpen = true"
+              @focus="isDropdownOpen = true"
+              @mouseleave="isDropdownOpen = false"
+            >
+              <button
+                @click="$router.push(`/user/${auth.user.username}`)"
+                class="control flex items-center gap-2"
+                value="Profile Dropdown"
+              >
+                <Avatar
+                  :src="auth.user.avatar_url"
+                  class="user-icon"
+                  :alt="formatMessage(messages.yourAvatarAlt)"
+                  aria-hidden="true"
+                  circle
+                />
+                <DropdownIcon class="h-4 w-4" aria-hidden="true" />
+              </button>
+              <div class="content card">
+                <NuxtLink class="item button-transparent" :to="`/user/${auth.user.username}`">
+                  <div class="title profile-link">
+                    <div class="username">@{{ auth.user.username }}</div>
+                    <div class="prompt">{{ formatMessage(commonMessages.visitYourProfile) }}</div>
+                  </div>
+                </NuxtLink>
+                <hr class="divider" />
+                <button class="item button-transparent" @click="$refs.modal_creation.show()">
+                  <PlusIcon class="icon" />
+                  <span class="title">
+                    {{ formatMessage(commonMessages.createAProjectButton) }}
+                  </span>
+                </button>
+                <hr class="divider" />
+                <NuxtLink class="item button-transparent" to="/dashboard/collections">
+                  <LibraryIcon class="icon" />
+                  <span class="title">{{ formatMessage(commonMessages.collectionsLabel) }}</span>
+                </NuxtLink>
+                <NuxtLink class="item button-transparent" to="/dashboard/notifications">
+                  <NotificationIcon class="icon" />
+                  <span class="title">{{ formatMessage(commonMessages.notificationsLabel) }}</span>
+                </NuxtLink>
+                <NuxtLink class="item button-transparent" to="/dashboard">
+                  <ChartIcon class="icon" />
+                  <span class="title">{{ formatMessage(commonMessages.dashboardLabel) }}</span>
+                </NuxtLink>
+                <NuxtLink class="item button-transparent" to="/settings">
+                  <SettingsIcon class="icon" />
+                  <span class="title">{{ formatMessage(commonMessages.settingsLabel) }}</span>
+                </NuxtLink>
+                <NuxtLink
+                  v-if="tags.staffRoles.includes(auth.user.role)"
+                  class="item button-transparent"
+                  to="/moderation"
+                >
+                  <ModerationIcon class="icon" />
+                  <span class="title">{{ formatMessage(commonMessages.moderationLabel) }}</span>
+                </NuxtLink>
+                <NuxtLink v-if="flags.developerMode" class="item button-transparent" to="/flags">
+                  <ReportIcon class="icon" />
+                  <span class="title">Feature flags</span>
+                </NuxtLink>
+                <NuxtLink
+                  v-if="!cosmetics.hideModrinthAppPromos"
+                  class="item button-transparent primary-color"
                   to="/app"
                 >
-                  <DownloadIcon /> {{ formatMessage(messages.getModrinthApp) }}
-                </nuxt-link>
-              </section>
+                  <DownloadIcon class="icon" />
+                  <span class="title">
+                    {{ formatMessage(messages.getModrinthApp) }}
+                  </span>
+                </NuxtLink>
+                <hr class="divider" />
+                <button class="item button-transparent" @click="logoutUser()">
+                  <LogOutIcon class="icon" />
+                  <span class="dropdown-item__text">
+                    {{ formatMessage(commonMessages.signOutButton) }}
+                  </span>
+                </button>
+              </div>
+            </div>
+            <section v-else class="flex gap-4">
+              <nuxt-link class="iconified-button raised-button" to="/auth/sign-in">
+                <LogInIcon /> {{ formatMessage(commonMessages.signInButton) }}
+              </nuxt-link>
+              <nuxt-link
+                v-if="$route.path !== '/app' && !cosmetics.hideModrinthAppPromos"
+                class="btn btn-outline btn-primary app-btn"
+                to="/app"
+              >
+                <DownloadIcon /> {{ formatMessage(messages.getModrinthApp) }}
+              </nuxt-link>
             </section>
           </section>
         </section>
       </section>
-      <section class="mobile-navigation">
+      <section class="mobile-navigation flex lg:hidden">
         <div
           class="nav-menu nav-menu-browse"
           :class="{ expanded: isBrowseMenuOpen }"
@@ -426,6 +508,11 @@ import {
   XIcon,
   IssuesIcon,
   ReportIcon,
+  BoxIcon,
+  PaintBrushIcon,
+  CodeIcon,
+  BracesIcon,
+  GlassesIcon,
 } from "@modrinth/assets";
 import { Button } from "@modrinth/ui";
 import HamburgerIcon from "~/assets/images/utils/hamburger.svg?component";
@@ -461,6 +548,7 @@ const tags = useTags();
 
 const config = useRuntimeConfig();
 const route = useNativeRoute();
+const error = useError();
 const link = config.public.siteUrl + route.path.replace(/\/+$/, "");
 
 const verifyEmailBannerMessages = defineMessages({
@@ -623,6 +711,7 @@ useSeoMeta({
 
 const developerModeCounter = ref(0);
 
+const isNavDropdownOpen = ref(false);
 const isDropdownOpen = ref(false);
 const isMobileMenuOpen = ref(false);
 const isBrowseMenuOpen = ref(false);
@@ -755,7 +844,6 @@ function hideStagingBanner() {
 
 <style lang="scss">
 @import "~/assets/styles/global.scss";
-// @import '@modrinth/assets';
 
 .layout {
   min-height: 100vh;
@@ -770,303 +858,116 @@ function hideStagingBanner() {
     margin-bottom: calc(var(--size-mobile-navbar-height) + 2rem);
   }
 
+  .global-navigation-dropdown {
+    .control {
+      align-items: center;
+      background: none;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      outline: none;
+
+      .user-icon {
+        min-height: unset;
+        min-width: unset;
+        height: 2rem !important;
+        width: 2rem !important;
+        outline: 2px solid var(--color-raised-bg);
+        transition: outline-color 0.1s ease-in-out;
+      }
+    }
+
+    .content {
+      border: 1px solid var(--color-divider-dark);
+      list-style: none;
+      margin: 0.5rem 0 0 0;
+      max-width: 25rem;
+      min-width: 12rem;
+      opacity: 0;
+      padding: 1rem;
+      position: absolute;
+      right: -1rem;
+      transform: scaleY(0.9);
+      transform-origin: top;
+      transition:
+        all 0.1s ease-in-out 0.05s,
+        color 0s ease-in-out 0s,
+        background-color 0s ease-in-out 0s,
+        border-color 0s ease-in-out 0s;
+      visibility: hidden;
+      width: max-content;
+      z-index: 1;
+      box-shadow: var(--shadow-floating);
+
+      .divider {
+        background-color: var(--color-divider-dark);
+        border: none;
+        color: var(--color-divider-dark);
+        height: 1px;
+        margin: 0.5rem 0;
+      }
+
+      .item {
+        align-items: center;
+        border-radius: 0.5rem;
+        box-sizing: border-box;
+        color: inherit;
+        display: flex;
+        padding: 0.5rem 0.75rem;
+        width: 100%;
+        outline: none;
+
+        .icon {
+          margin-right: 0.5rem;
+          height: 20px;
+          width: 20px;
+        }
+
+        &.router-link-exact-active {
+          color: var(--color-button-text-active);
+          background-color: var(--color-button-bg);
+          outline: 2px solid transparent;
+
+          &.primary-color {
+            color: var(--color-button-text-active);
+            background-color: var(--color-brand-highlight);
+          }
+        }
+
+        &.primary-color {
+          color: var(--color-brand);
+        }
+      }
+
+      .profile-link {
+        .prompt {
+          margin-top: 0.25rem;
+          color: var(--color-text-secondary);
+        }
+      }
+    }
+
+    @media screen and (max-width: 1300px) {
+      .content {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .global-navigation-dropdown:hover .user-icon {
+    outline-color: var(--color-brand);
+  }
+
+  .global-navigation-dropdown:hover:not(.closed) .content,
+  .global-navigation-dropdown:focus:not(.closed) .content,
+  .global-navigation-dropdown:focus-within:not(.closed) .content {
+    opacity: 1;
+    transform: scaleY(1);
+    visibility: visible;
+  }
+
   .site-header {
-    max-width: 100vw;
-
-    @media screen and (min-width: 1024px) {
-      margin-top: var(--spacing-card-md);
-      margin-bottom: var(--spacing-card-md);
-    }
-
-    @media screen and (min-width: 1280px) {
-      border-radius: var(--size-rounded-sm);
-      max-width: 1280px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .navbar {
-      padding: 0 var(--spacing-card-lg);
-      margin: 0 var(--spacing-card-lg);
-      max-width: 1280px;
-      margin-left: auto;
-      margin-right: auto;
-
-      section.logo {
-        display: flex;
-        justify-content: space-between;
-        color: var(--color-text-dark);
-        z-index: 5;
-
-        a {
-          align-items: center;
-          display: flex;
-
-          &:not(:focus-visible) {
-            outline: none;
-
-            &.router-link-exact-active {
-              outline: 2px solid transparent;
-              border-radius: 0.25rem;
-            }
-          }
-        }
-
-        .small-logo {
-          display: block;
-        }
-
-        svg {
-          height: 1.75rem;
-          width: auto;
-        }
-
-        button {
-          background: none;
-          border: none;
-          margin: 0 0 0 0.5rem;
-          padding: 0;
-
-          svg {
-            height: 1.5rem;
-            width: 1.5rem;
-          }
-        }
-      }
-
-      section.nav-group {
-        display: flex;
-        flex-grow: 5;
-        z-index: 5;
-
-        section.nav {
-          flex-grow: 5;
-
-          .navigation {
-            display: flex;
-            width: fit-content;
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
-            margin-left: 2rem;
-            grid-gap: 1.5rem;
-
-            a {
-              margin-left: 0;
-              margin-right: auto;
-            }
-
-            a.tab {
-              padding: 0;
-              margin-right: 1rem;
-              display: flex;
-              align-items: flex-start;
-
-              &--alpha::after {
-                content: "Alpha";
-                background-color: var(--color-warning-bg);
-                color: var(--color-warning-text);
-                border-radius: 1rem;
-                padding: 0.25rem 0.5rem;
-                margin-left: 0.4rem;
-                font-size: 0.7rem;
-              }
-            }
-          }
-        }
-
-        .user-outer {
-          z-index: 5;
-        }
-
-        section.user-controls {
-          align-items: center;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          position: relative;
-          top: 50%;
-          transform: translateY(-50%);
-          min-width: 6rem;
-          gap: 0.25rem;
-
-          .control-button {
-            position: relative;
-            display: flex;
-            padding: 0.5rem;
-            color: var(--color-text);
-            border-radius: 2rem;
-            transition: filter 0.1s ease-in-out;
-            border: 2px solid transparent;
-            box-sizing: border-box;
-
-            svg {
-              height: 1.25rem;
-              width: 1.25rem;
-            }
-
-            &.bubble {
-              &::after {
-                background-color: var(--color-brand);
-                border-radius: var(--size-rounded-max);
-                content: "";
-                height: 0.5rem;
-                position: absolute;
-                right: 0.25rem;
-                top: 0.5rem;
-                width: 0.5rem;
-              }
-            }
-
-            //&.router-link-exact-active {
-            //  color: var(--color-button-text-active);
-            //  background-color: var(--color-button-bg);
-            //}
-          }
-
-          .hide-desktop {
-            display: none;
-          }
-
-          .dropdown {
-            position: relative;
-            margin-left: 0.5rem;
-
-            .control {
-              align-items: center;
-              background: none;
-              display: flex;
-              justify-content: center;
-              padding: 0;
-              outline: none;
-
-              .user-icon {
-                min-height: unset;
-                min-width: unset;
-                height: 2rem !important;
-                width: 2rem !important;
-                outline: 2px solid var(--color-raised-bg);
-                transition: outline-color 0.1s ease-in-out;
-              }
-
-              .caret {
-                color: var(--color-button-text);
-                margin-left: 0.25rem;
-                width: 1rem;
-              }
-            }
-
-            .content {
-              border: 1px solid var(--color-divider-dark);
-              list-style: none;
-              margin: 0.5rem 0 0 0;
-              max-width: 25rem;
-              min-width: 12rem;
-              opacity: 0;
-              padding: 1rem;
-              position: absolute;
-              right: -1rem;
-              transform: scaleY(0.9);
-              transform-origin: top;
-              transition:
-                all 0.1s ease-in-out 0.05s,
-                color 0s ease-in-out 0s,
-                background-color 0s ease-in-out 0s,
-                border-color 0s ease-in-out 0s;
-              visibility: hidden;
-              width: max-content;
-              z-index: 1;
-              box-shadow: var(--shadow-floating);
-
-              .divider {
-                background-color: var(--color-divider-dark);
-                border: none;
-                color: var(--color-divider-dark);
-                height: 1px;
-                margin: 0.5rem 0;
-              }
-
-              .item {
-                align-items: center;
-                border-radius: 0.5rem;
-                box-sizing: border-box;
-                color: inherit;
-                display: flex;
-                padding: 0.5rem 0.75rem;
-                width: 100%;
-                outline: none;
-
-                .icon {
-                  margin-right: 0.5rem;
-                  height: 20px;
-                  width: 20px;
-                }
-
-                &.router-link-exact-active {
-                  color: var(--color-button-text-active);
-                  background-color: var(--color-button-bg);
-                  outline: 2px solid transparent;
-
-                  &.primary-color {
-                    color: var(--color-button-text-active);
-                    background-color: var(--color-brand-highlight);
-                  }
-                }
-
-                &.primary-color {
-                  color: var(--color-brand);
-                }
-              }
-
-              .profile-link {
-                .prompt {
-                  margin-top: 0.25rem;
-                  color: var(--color-text-secondary);
-                }
-              }
-            }
-
-            @media screen and (max-width: 1300px) {
-              .content {
-                margin-right: 1rem;
-              }
-            }
-          }
-
-          .dropdown:hover .user-icon {
-            outline-color: var(--color-brand);
-          }
-
-          .dropdown:hover:not(.closed) .content,
-          .dropdown:focus:not(.closed) .content,
-          .dropdown:focus-within:not(.closed) .content {
-            opacity: 1;
-            transform: scaleY(1);
-            visibility: visible;
-          }
-        }
-
-        section.auth-prompt {
-          display: flex;
-          align-items: center;
-          height: 100%;
-          margin: 0;
-          gap: 0.5rem;
-
-          .log-in-button {
-            margin: 0 auto;
-          }
-        }
-      }
-
-      @media screen and (max-width: 1095px) {
-        display: none;
-      }
-    }
-
     .mobile-navigation {
-      display: none;
-
       .nav-menu {
         width: 100%;
         position: fixed;
@@ -1250,23 +1151,12 @@ function hideStagingBanner() {
           }
         }
       }
-
-      @media screen and (max-width: 1095px) {
-        display: flex;
-      }
-    }
-
-    div {
-      flex-grow: 1;
-      justify-content: end;
-      align-items: center;
-      row-gap: 1rem;
     }
 
     &.active {
       display: flex;
 
-      @media screen and (min-width: 1095px) {
+      @media screen and (min-width: 768px) {
         display: none;
       }
     }
@@ -1358,7 +1248,7 @@ function hideStagingBanner() {
       margin-top: var(--spacing-card-md);
     }
 
-    @media screen and (min-width: 1024px) {
+    @media screen and (min-width: 768px) {
       display: grid;
       margin-inline: auto;
       grid-template:
@@ -1386,20 +1276,6 @@ function hideStagingBanner() {
 
       .not-affiliated-notice {
         margin-top: 0;
-      }
-    }
-  }
-}
-
-@media (min-width: 1024px) {
-  .layout {
-    main {
-      .alpha-alert {
-        margin: 1rem;
-
-        .wrapper {
-          padding: 1rem 2rem 1rem 1rem;
-        }
       }
     }
   }
