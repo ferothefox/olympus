@@ -743,7 +743,7 @@ const navRoutes = computed(() => [
 ]);
 
 onMounted(() => {
-  if (window && process.client) {
+  if (window && import.meta.client) {
     window.history.scrollRestoration = "auto";
   }
 
@@ -756,7 +756,7 @@ watch(
     isMobileMenuOpen.value = false;
     isBrowseMenuOpen.value = false;
 
-    if (process.client) {
+    if (import.meta.client) {
       document.body.style.overflowY = "scroll";
       document.body.setAttribute("tabindex", "-1");
       document.body.removeAttribute("tabindex");
